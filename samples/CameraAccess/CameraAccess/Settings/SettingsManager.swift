@@ -131,12 +131,16 @@ final class SettingsManager {
     set { defaults.set(newValue, forKey: Self.showCaptionsKey) }
   }
 
-  /// Cloud by default: the hosted gateway needs nothing installed and keeps
-  /// working with the phone away from home, which self-hosting cannot do.
+  /// Self-hosted by default in this fork: the stock default (.cloud) gates
+  /// the entire app behind an invite-only access code for the maintainers'
+  /// hosted gateway (see AccessCodeView in CameraAccessApp.swift), which we
+  /// have no code for and don't need — voice + vision via Gemini works with
+  /// no agent backend configured at all; only the optional "take real-world
+  /// actions" feature needs one, self-hosted or otherwise.
   var agentBackend: AgentBackend {
     get {
       guard let raw = defaults.string(forKey: Key.agentBackend.rawValue),
-            let backend = AgentBackend(rawValue: raw) else { return .cloud }
+            let backend = AgentBackend(rawValue: raw) else { return .selfHosted }
       return backend
     }
     set { defaults.set(newValue.rawValue, forKey: Key.agentBackend.rawValue) }
